@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Latest Posts</h1>
+        <a href="{% url 'post_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> New Post
+        </a>
+    </div>
+    
+    <form method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Search posts..." 
+                   value="{{ request.GET.search }}">
+            <button type="submit" class="btn btn-outline-secondary">Search</button>
+        </div>
+    </form>
+
+    {% for post in page_obj %}
+        <div class="card mb-4 shadow">
+            {% if post.image %}
+                <a href="{% url 'post_detail' post.id %}">
+                    <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
+                </a>
+            {% endif %}
+            <div class="card-body">
+                <h2 class="card-title">
+                    <a href="{% url 'post_detail' post.id %}" class="text-decoration-none">
+                        {{ post.title }}
+                    </a>
+                </h2>
+                <p class="card-text">
+                    <a href="{% url 'post_detail' post.id %}" class="text-decoration-none">
+                        {{ post.content|truncatechars:200 }}
+                    </a>
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                        Posted by {{ post.author.username }} on {{ post.created_at|date:"M d, Y" }}
+                    </small>
+                    <span class="badge bg-secondary">
+                        {{ post.comment_set.count }} comments
+                    </span>
+                </div>
+                
+                <!-- Display 1-3 comments -->
+              <div class="mt-3">
+    {% for comment in post.comment_set.all|slice:":3" %}
+        <div class="card mb-2">
+            <div class="card-body p-2">
+                <strong>{{ comment.author.username }}:</strong> {{ comment.content|truncatechars:80 }}
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-muted">No comments yet.</p>
+    {% endfor %}
+    {% if post.comment_set.count > 3 %}
+        <a href="{% url 'post_detail' post.id %}" class="text-decoration-none text-light">See all comments...</a>
+    {% endif %}
+</div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">&laquo; First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% endif %}
+            
+            <li class="page-item disabled">
+                <span class="page-link">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

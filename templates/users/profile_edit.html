@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .glass {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .glass:hover {
+        transform: scale(1.01);
+    }
+
+    .profile-image {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 5px solid #fff;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.4s ease;
+    }
+
+    .profile-image:hover {
+        transform: scale(1.05) rotate(1deg);
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-control, .form-control-file {
+        border-radius: 12px;
+        border: 1px solid #ccc;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .form-control:focus {
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        border-color: #007bff;
+    }
+
+    .btn-info {
+        background: linear-gradient(to right, #36d1dc, #5b86e5);
+        border: none;
+        border-radius: 25px;
+        font-weight: bold;
+        transition: background 0.3s ease-in-out;
+    }
+
+    .btn-info:hover {
+        background: linear-gradient(to right, #5b86e5, #36d1dc);
+    }
+</style>
+
+<div class="row justify-content-center py-5">
+    <div class="col-md-10">
+        <div class="card shadow glass">
+            <div class="card-header bg-primary text-white rounded-top">
+                <h4 class="mb-0">Edit Profile</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <!-- Profile Picture Section -->
+                        <div class="col-md-4 text-center">
+                            <div class="mb-3">
+                                {% if user.profile_pic %}
+                                    <img src="{{ user.profile_pic.url }}" 
+                                         class="profile-image mb-3" 
+                                         alt="Profile Picture">
+                                {% else %}
+                                    <img src="{% static 'images/default-profile.png' %}" 
+                                         class="profile-image mb-3" 
+                                         alt="Default Profile">
+                                {% endif %}
+                                <div class="form-group">
+                                    <input type="file" name="profile_pic" 
+                                           class="form-control-file" 
+                                           id="id_profile_pic"
+                                           accept="image/*">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Other Form Fields -->
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">First Name</label>
+                                        {{ form.first_name }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Last Name</label>
+                                        {{ form.last_name }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        {{ form.email }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                       
+                                        {% if user.profile_pic %}
+                                            <img src="{{ user.profile_pic.url }}" class="img-thumbnail mb-2" width="100">
+                                        {% endif %}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Contact Number</label>
+                                        {{ form.contact_number }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-info w-100 mt-3">Update Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

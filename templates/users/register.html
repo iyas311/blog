@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+        /* Internal CSS for this page */
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            background: linear-gradient(45deg, #212121, #424242); /* Black gradient */
+            color: white;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #212121, #424242); /* Black gradient button */
+            border: none;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #424242, #212121); /* Reverse gradient on hover */
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #dcdcdc; /* Light gray for text */
+        }
+
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #666666; /* Dark grey border */
+            background-color: #333333; /* Dark background for inputs */
+            color: white;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #ffffff; /* White border on focus */
+            box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25); /* White shadow */
+        }
+
+        .form-control:focus-visible {
+            outline: none; /* Remove default focus outline */
+        }
+
+        .text-center a {
+            text-decoration: none;
+            color: #dcdcdc;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .text-center a:hover {
+            color: #ffffff; /* White color on hover */
+        }
+
+        .card-body {
+            background-color: #1f1f1f; /* Dark background for the card body */
+        }
+
+        /* Extra margin for input fields */
+        .mb-3 input {
+            margin-bottom: 10px;
+        }
+    </style>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h4 class="mb-0">REGISTER</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Username</label>
+                                    {{ form.username }}
+                                    <small class="text-danger">{{ form.username.errors }}</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">First Name</label>
+                                    {{ form.first_name }}
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Last Name</label>
+                                    {{ form.last_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    {{ form.email }}
+                                    <small class="text-danger">{{ form.email.errors }}</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Profile Picture</label>
+                                    {{ form.profile_pic }}
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Contact Number</label>
+                                    {{ form.contact_number }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            {{ form.password1 }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Confirm Password</label>
+                            {{ form.password2 }}
+                            <small class="text-danger">{{ form.password2.errors }}</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
